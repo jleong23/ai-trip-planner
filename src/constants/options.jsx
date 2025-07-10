@@ -4,28 +4,28 @@ export const SelectTravelerList =[
     title: 'Solo',
     description: 'Traveling alone',
     icon: '👤',
-    people: '1',
+    people: '1 people',
   },
   {
     id: 2,
     title: 'Couple',
     description: 'Traveling with a partner',
     icon: '❤️',
-    people: '2',
+    people: '2 people',
   },
   {
     id: 3,
     title: 'Family',
     description: 'Traveling with family members',
     icon: '👨‍👩‍👧‍👦',
-    people: '3 to 5 people',
+    people: '3-5 people',
   },
   {
     id: 4,
     title: 'Friends',
     description: 'Traveling with friends',
     icon: '👯‍♂️',
-    people: '5 - 10 people',
+    people: '5-10 people',
   }
 ]
 
