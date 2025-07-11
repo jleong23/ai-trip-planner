@@ -9,6 +9,7 @@ import { MapPinHouse } from 'lucide-react'
 import { CalendarDays } from 'lucide-react'
 import { CircleDollarSign } from 'lucide-react'
 import { BookUser } from 'lucide-react'
+import { toast } from 'sonner';
 
 
 function CreateTrip() {
@@ -29,7 +30,9 @@ function CreateTrip() {
   },[formData])
 
   const OnGenerateTrip = () => {
-    if(formData?.days > 5){
+    if(formData?.days > 5 && !formData?.location || !formData?.budget || !formData?.traveler)
+    {
+      toast("Please fill in all details!")
       return;
     }
 
