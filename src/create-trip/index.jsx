@@ -12,14 +12,15 @@ import { BookUser } from 'lucide-react'
 
 
 function CreateTrip() {
-  // ! Continue here (53:10)
   const [place, setPlace] = useState();
   const [formData, setFormData] = useState([ ]);
+  //name(eg. location, days, budget) value(eg. Paris, numberofpeople)
   const handleInputChange = (name,value) => {
-    setFormData ({
-      ...formData,
+    setFormData((prev) => ({
+      ...prev,
       [name]: value
-    })
+    }));
+
   }
 
   useEffect(() => {
