@@ -4,7 +4,7 @@ import {useState} from 'react'
 import { Input } from '@/components/ui/input';
 import { AI_PROMPT, SelectBudgetOptions, SelectTravelerList } from '@/constants/options';
 import {Button} from '@/components/ui/button';
-import { Plane } from 'lucide-react'
+import { Plane, Save } from 'lucide-react'
 import { MapPinHouse } from 'lucide-react'
 import { CalendarDays } from 'lucide-react'
 import { CircleDollarSign } from 'lucide-react'
@@ -25,14 +25,16 @@ import axios from 'axios';
 import { setDoc } from 'firebase/firestore';
 import { doc } from 'firebase/firestore';
 import { db } from '@/service/firebaseConfig';
+import { AiOutlineLoading } from "react-icons/ai";
 
 
 
 function CreateTrip() {
   const [place, setPlace] = useState();
-  const [formData, setFormData] = useState([ ]);
-
+  const [formData, setFormData] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
+
+  const [loading, setLoading] = useState(false);
 
   //name(eg. location, days, budget) value(eg. Paris, numberofpeople)
   const handleInputChange = (name,value) => {
@@ -71,6 +73,8 @@ function CreateTrip() {
       return;
     }
 
+    setLoading(true);
+
     const FINAL_PROMPT = AI_PROMPT
     .replace('{location', formData?.location?.label)
     .replace('{totalDays}', formData?.days)
@@ -78,21 +82,29 @@ function CreateTrip() {
     .replace('{budget}', formData?.budget)
     .replace('{totalDays}', formData?.days);
 
-    console.log('Final Prompt:', FINAL_PROMPT);
-
     const result = await chatSession.sendMessage(FINAL_PROMPT);
     console.log('AI Response:', result);
+    setLoading(false);
+
+    if(!result?.text) {
+      toast("AI response is empty. Trip not saved.");
+      return;
+    }
+    await SaveAiTrip(result.text);
   }
 
   const SaveAiTrip = async (TripData) => {
-
+    setLoading(true);
     const user = JSON.parse(localStorage.getItem('user'));
     const docId = Date.now().toString();
       await setDoc(doc(db, "AITrips", docId), {
         userSelection: formData,
         tripData: TripData,
-        createdAt: new Date().toISOString(), 
-});
+        userEmail: user?.email,
+        id: docId,
+    });
+    setLoading(false);
+
   }
 
   const GetUserProfile=(tokenInfo) => {
@@ -191,8 +203,13 @@ function CreateTrip() {
         </div>
         
         <div className='my-10 flex justify-end'>
-          <Button onClick={OnGenerateTrip}>
-            Generate
+          <Button 
+            disabled = {loading}
+            onClick={OnGenerateTrip}>
+            {loading ? 
+              <AiOutlineLoading className='h-7 w-7 animate-spin' /> : 'Generate Trip'
+            }
+            Generate Trip
           </Button>
         </div>
 
@@ -206,10 +223,9 @@ function CreateTrip() {
                   <p>Sign in to the App with Google Authentication securely.</p>
                   <Button 
                     className='mt-5 w-full text-white flex gap-4 items-center'
-                    onClick={login}
-                  >
-                    <FcGoogle className='h-7 w-7'/>
-                    Sign in with Google
+                    onClick={login}>
+                      <FcGoogle className='h-7 w-7'/>
+                      Sign in with Google
                   </Button>
                 </div>
               </DialogDescription>
