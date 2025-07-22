@@ -4,11 +4,10 @@ import { useState } from 'react'
 import { Input } from '@/components/ui/input'
 import { AI_PROMPT, SelectBudgetOptions, SelectTravelerList } from '@/constants/options'
 import { Button } from '@/components/ui/button'
-import { Plane } from 'lucide-react'
+import { Plane, Users } from 'lucide-react'
 import { MapPinHouse } from 'lucide-react'
 import { CalendarDays } from 'lucide-react'
 import { CircleDollarSign } from 'lucide-react'
-import { BookUser } from 'lucide-react'
 import { toast } from 'sonner'
 import { chatSession } from '@/service/AIModel'
 import {
@@ -227,7 +226,7 @@ function CreateTrip() {
 
         <div>
           <div className="flex items-center gap-2 mt-3">
-            <BookUser className="text-xl" />
+            <Users className="text-xl" />
             <h2 className="text-xl my-3 font-medium">Who do you plan on traveling with in your adventure?</h2>
           </div>
 
