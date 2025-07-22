@@ -24,6 +24,7 @@ import axios from 'axios'
 import { setDoc, doc } from 'firebase/firestore'
 import { db } from '@/service/firebaseConfig'
 import { AiOutlineLoading } from 'react-icons/ai'
+import { useNavigate } from 'react-router-dom'
 
 // Helper to extract JSON from markdown code blocks like ```json ... ```
 function extractJsonFromText(text) {
@@ -40,6 +41,8 @@ function CreateTrip() {
   const [formData, setFormData] = useState({})
   const [openDialog, setOpenDialog] = useState(false)
   const [loading, setLoading] = useState(false)
+
+  const navigate = useNavigate()
 
   // Update form data by name and value
   const handleInputChange = (name, value) => {
@@ -131,6 +134,7 @@ function CreateTrip() {
 
     setLoading(false)
     toast.success('Trip saved successfully!')
+    navigate('/view-trip/' + docId)
   }
 
   const GetUserProfile = (tokenInfo) => {
